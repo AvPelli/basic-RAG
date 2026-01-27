@@ -1,6 +1,7 @@
 import os
 from collections import Counter
 import pandas as pd
+import numpy as np
 
 
 class Retriever:
@@ -36,4 +37,15 @@ class Retriever:
             wordcount = self._countWords(file)
             counters.append(wordcount)
 
-        return pd.DataFrame(counters, index=all_files).fillna(0, inplace=True)
+        matrix = pd.DataFrame(counters, index=all_files)
+        matrix = matrix.fillna(0, inplace=True)
+        return matrix.T
+
+    def inverseDocumentFrequency(self):
+        """IDF is a way to give bigger weights to words that are rarer"""
+        distinct_words = len(self.documentMatrix)
+        wordFrequencies = self.documentMatrix.sum(axis=1) / distinct_words
+        return np.log1p(1 / wordFrequencies)
+
+    def getWeightedMatrix(self):
+        return self.documentMatrix.mul(self.inverseDocumentFrequency(), axis=0)

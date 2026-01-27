@@ -7,7 +7,12 @@ def main():
     print("Current directory: " + current_dir)
 
     retriever = Retriever(current_dir)
-    print(retriever.documentMatrix.head(5))
+
+    IDF = retriever.inverseDocumentFrequency()
+    print(IDF)
+
+    weightedMatrix = retriever.getWeightedMatrix()
+    print(weightedMatrix)
 
 
 if __name__ == "__main__":

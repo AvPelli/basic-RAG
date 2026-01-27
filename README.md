@@ -22,4 +22,4 @@ I try to follow clean code principles:
 
 * Keeping documentation short and to the point
 
-* Limit the amount of work done by each function, the name of the function should 
+* Limit the amount of work done by each function, the name of the function should contain enough information to know what happens inside the function

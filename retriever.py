@@ -11,6 +11,7 @@ class Retriever:
 
         self.documentpaths = path
         self.documentMatrix = self._getDocumentMatrix(path)
+        self.weightedMatrix = self.getWeightedMatrix()
 
     def _countWords(self, path):
         """Return Counter containing wordcounts"""
@@ -41,11 +42,25 @@ class Retriever:
         matrix = matrix.fillna(0, inplace=True)
         return matrix.T
 
-    def inverseDocumentFrequency(self):
+    def _inverseDocumentFrequency(self):
         """IDF is a way to give bigger weights to words that are rarer"""
         distinct_words = len(self.documentMatrix)
         wordFrequencies = self.documentMatrix.sum(axis=1) / distinct_words
         return np.log1p(1 / wordFrequencies)
 
     def getWeightedMatrix(self):
-        return self.documentMatrix.mul(self.inverseDocumentFrequency(), axis=0)
+        return self.documentMatrix.mul(self._inverseDocumentFrequency(), axis=0)
+
+    def file_scoring(self, prompt: str):
+        prompt_words = prompt.split(sep=None)
+        file_names = self.weightedMatrix.columns.tolist()
+        scores = Counter()
+
+        for file in file_names:
+            for word in prompt_words:
+                try:
+                    scores[file] += self.weightedMatrix.loc[word, file]
+                except KeyError:
+                    continue
+
+        return scores

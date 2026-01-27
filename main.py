@@ -8,11 +8,12 @@ def main():
 
     retriever = Retriever(current_dir)
 
-    IDF = retriever.inverseDocumentFrequency()
-    print(IDF)
-
     weightedMatrix = retriever.getWeightedMatrix()
     print(weightedMatrix)
+
+    scores = retriever.file_scoring("find me a test")
+    print("Scores for prompt:\n")
+    print("\n".join(f"{k}: {v}" for k, v in scores.most_common()))
 
 
 if __name__ == "__main__":

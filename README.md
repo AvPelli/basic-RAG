@@ -1,7 +1,7 @@
 # basic-RAG
 Basic implementation of a RAG system.
 
-The goal of this project is improving my understanding of Retrieval Augmented Generation, by making such a system myself from the ground up. 
+The goal of this project is to improve my understanding of Retrieval Augmented Generation, by building such a system from the ground up. 
 
 While building i made effort to not use any AI assist in coding, as this would hinder the learning process.
 

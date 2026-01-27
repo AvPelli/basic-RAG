@@ -6,8 +6,9 @@ def main():
     current_dir = os.getcwd()
     print("Current directory: " + current_dir)
 
-    retriever = Retriever(os.path.join(current_dir,'knowledgebase/test.txt'))
+    retriever = Retriever(current_dir)
     print(retriever.documentMatrix.head(5))
+
 
 if __name__ == "__main__":
     main()

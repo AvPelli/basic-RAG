@@ -3,10 +3,7 @@ from retriever import Retriever
 
 
 def main():
-    current_dir = os.getcwd()
-    print("Current directory: " + current_dir)
-
-    retriever = Retriever(current_dir)
+    retriever = Retriever()
 
     weightedMatrix = retriever.getWeightedMatrix()
     print(weightedMatrix)

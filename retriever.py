@@ -6,11 +6,15 @@ import numpy as np
 
 class Retriever:
 
-    def __init__(self, path):
-        """Retriever object has a path to a file"""
+    def __init__(self, *args):
+        """Retriever has path to knowledge-directory as argument, if none given it takes the ./knowledgebase directory."""
 
-        self.documentpaths = path
-        self.documentMatrix = self._getDocumentMatrix(path)
+        if len(args) == 0:
+            self.knowledgePath = os.getcwd() + "/knowledgebase"
+        elif len(args) == 1:
+            self.knowledgePath = args[0]
+
+        self.documentMatrix = self._getDocumentMatrix(self.knowledgePath)
         self.weightedMatrix = self.getWeightedMatrix()
 
     def _countWords(self, path):
@@ -27,8 +31,9 @@ class Retriever:
         return counter
 
     def _getDocumentMatrix(self, path):
+        """Set up TF matrix by scanning all documents under knowledgePath"""
         all_files = []
-        for path, dirs, files in os.walk(path + "/knowledgebase"):
+        for path, dirs, files in os.walk(path):
             for file in files:
                 all_files.append(os.path.join(path, file))
         print("files found: " + str(all_files))
@@ -43,15 +48,17 @@ class Retriever:
         return matrix.T
 
     def _inverseDocumentFrequency(self):
-        """IDF is a way to give bigger weights to words that are rarer"""
+        """calculate IDF array: each word gets a weight based on rareity"""
         distinct_words = len(self.documentMatrix)
         wordFrequencies = self.documentMatrix.sum(axis=1) / distinct_words
         return np.log1p(1 / wordFrequencies)
 
     def getWeightedMatrix(self):
+        """multiplying frequency matrix by IDF array, resulting in TF-IDF matrix"""
         return self.documentMatrix.mul(self._inverseDocumentFrequency(), axis=0)
 
     def file_scoring(self, prompt: str):
+        """scoring file relevance by matching prompt words to our TF-IDF matrix"""
         prompt_words = prompt.split(sep=None)
         file_names = self.weightedMatrix.columns.tolist()
         scores = Counter()

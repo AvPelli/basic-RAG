@@ -5,69 +5,66 @@ import numpy as np
 
 
 class Retriever:
+    """
+    A retriever based on TF-IDF algorithm, scores documents by matching prompt words.
+    Uses knowledge directory to build term matrix.
+    """
 
-    def __init__(self, *args):
-        """Retriever has path to knowledge-directory as argument, if none given it takes the ./knowledgebase directory."""
+    def __init__(self, knowledge_path: str = None):
+        """
+        Initializing Retriever with knowledge directory path.
+        Defaults to './knowledgebase' if no path provided.
+        """
 
-        if len(args) == 0:
-            self.knowledgePath = os.getcwd() + "/knowledgebase"
-        elif len(args) == 1:
-            self.knowledgePath = args[0]
+        self.knowledge_path = knowledge_path or os.path.join(
+            os.getcwd(), "knowledgebase"
+        )
+        self.document_matrix = self._getDocumentMatrix()
+        self.weighted_matrix = self.getWeightedMatrix()
 
-        self.documentMatrix = self._getDocumentMatrix(self.knowledgePath)
-        self.weightedMatrix = self.getWeightedMatrix()
-
-    def _countWords(self, path):
-        """Return Counter containing wordcounts"""
-        # Read file as 1 string:
-        with open(path, "r") as file:
+    def _countWords(self, file_path: str) -> Counter:
+        """Count word frequencies in a file"""
+        with open(file_path, "r") as file:
             content = file.read()
-
-        # Count words:
-        counter = Counter()
         words = content.split(sep=None)
-        for w in words:
-            counter[w] += 1
-        return counter
+        return Counter(words)
 
-    def _getDocumentMatrix(self, path):
-        """Set up TF matrix by scanning all documents under knowledgePath"""
-        all_files = []
-        for path, dirs, files in os.walk(path):
+    def _getDocumentMatrix(self) -> pd.DataFrame:
+        """Build TF matrix by scanning all documents under knowledgePath"""
+        file_paths = []
+        for path, dirs, files in os.walk(self.knowledge_path):
             for file in files:
-                all_files.append(os.path.join(path, file))
-        print("files found: " + str(all_files))
+                if file.endswith(".txt"):
+                    file_paths.append(os.path.join(path, file))
 
-        counters = []
-        for file in all_files:
-            wordcount = self._countWords(file)
-            counters.append(wordcount)
+        print(f"Found {len(file_paths)} files")
 
-        matrix = pd.DataFrame(counters, index=all_files)
-        matrix = matrix.fillna(0, inplace=True)
+        counters = [self._countWords(fp) for fp in file_paths]
+
+        matrix = pd.DataFrame(counters, index=file_paths).fillna(0)
         return matrix.T
 
-    def _inverseDocumentFrequency(self):
-        """calculate IDF array: each word gets a weight based on rareity"""
-        distinct_words = len(self.documentMatrix)
-        wordFrequencies = self.documentMatrix.sum(axis=1) / distinct_words
-        return np.log1p(1 / wordFrequencies)
+    def _inverse_document_frequency(self) -> pd.Series:
+        """Calculate IDF: log(1 + total_docs / doc_freq) for each term"""
+        total_docs = len(self.document_matrix.columns)
+        doc_frequencies = (self.document_matrix > 0).sum(axis=1)
+        return np.log1p(total_docs / doc_frequencies)
 
     def getWeightedMatrix(self):
-        """multiplying frequency matrix by IDF array, resulting in TF-IDF matrix"""
-        return self.documentMatrix.mul(self._inverseDocumentFrequency(), axis=0)
+        """multiplying TF matrix with IDF array, resulting in TF-IDF matrix"""
+        return self.document_matrix.mul(self._inverse_document_frequency(), axis=0)
 
     def file_scoring(self, prompt: str):
-        """scoring file relevance by matching prompt words to our TF-IDF matrix"""
-        prompt_words = prompt.split(sep=None)
-        file_names = self.weightedMatrix.columns.tolist()
+        """
+        Score files based on TF-IDF weights of prompt words.
+        Returns Counter with file paths as keys and relevance scores as values
+        """
+        prompt_words = prompt.split()
         scores = Counter()
 
-        for file in file_names:
-            for word in prompt_words:
-                try:
-                    scores[file] += self.weightedMatrix.loc[word, file]
-                except KeyError:
-                    continue
+        for word in prompt_words:
+            if word in self.weighted_matrix.index:
+                row = self.weighted_matrix.loc[word]
+                scores.update(dict(zip(row.index, row.values)))
 
         return scores

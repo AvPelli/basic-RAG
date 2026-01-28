@@ -25,12 +25,25 @@ I try to follow clean code principles:
 * Limit the amount of work done by each function, the name of the function should contain enough information to know what happens inside the function
 
 
+## Roadmap:
 
-## To do:
+Basic RAG:
 
-keyword search completed 27/01
-semantic search implementation
+- [x] Implement keyword-search - _completed 27/01_
+- [ ] Implement semantic-search 
+- [ ] Implement LLM
+- [ ] Test complete RAG system 
 
-LLM implementation
 
-complete RAG system test
+Production RAG:
+
+- [ ] Study state of the art retrieval algorithms / libraries
+- [ ] Study opensource LLM variations
+- [ ] Test state of the art RAG system
+- [ ] Compare with self-implemented basic RAG and reflect on the results
+
+Modifications and tuning:
+
+- [ ] Study pre-training of opensource LLM's
+- [ ] Apply custom knowledgebase as training data
+- [ ] Compare custom trained with untrained general LLM

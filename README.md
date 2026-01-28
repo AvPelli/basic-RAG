@@ -14,6 +14,8 @@ Here i will keep a list of choices i made during implementation:
 
 * I'm using the TF-IDF algorithm to score documents, this is a foundational algorithm on which BM25 is an improvement. BM25 is widely used in RAG systems and builds further upon TF-IDF by normalizing for document-length, Term Frequency (TF) and provides tunable parameters for these.
 
+* Currently only supporting .txt and .pdf files in the knowledgebase
+
 I try to follow clean code principles: 
 
 * Keeping the code easy to read and understand 
@@ -21,3 +23,14 @@ I try to follow clean code principles:
 * Keeping documentation short and to the point
 
 * Limit the amount of work done by each function, the name of the function should contain enough information to know what happens inside the function
+
+
+
+## To do:
+
+keyword search completed 27/01
+semantic search implementation
+
+LLM implementation
+
+complete RAG system test

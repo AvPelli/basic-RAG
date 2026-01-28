@@ -8,7 +8,7 @@ def main():
     weightedMatrix = retriever.getWeightedMatrix()
     print(weightedMatrix)
 
-    scores = retriever.file_scoring("find me a test")
+    scores = retriever.file_scoring("Can machines think?")
     print("Scores for prompt:\n")
     print("\n".join(f"{k}: {v}" for k, v in scores.most_common()))
 

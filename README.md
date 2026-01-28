@@ -51,3 +51,11 @@ In general, I try to follow clean code principles:
 * I'm using the TF-IDF algorithm to score documents, this is a foundational algorithm on which BM25 is an improvement. BM25 is widely used in RAG systems and builds further upon TF-IDF by normalizing for document-length, Term Frequency (TF) and provides tunable parameters for these.
 
 * Currently only supporting .txt and .pdf files in the knowledgebase
+
+### Basic RAG - implement semantic-search :
+
+Keyword search naively bases document relevance on word counts. Semantic search takes into account meaning and context. 
+
+To do so an "embedded model" is trained on groups of words which form positive or negative couples, the model tries to assign a vector to each wordgroup so that similar couples (with a positive score) are closer together and dissimilar couples (with a negative score) are further apart. 
+
+Due to the complexity of this task, this has to be done in a very high dimensional space. Then the similarity of two wordgroups is calculated by combining the dot product (projection of the vectors onto eachother) and cosine similarity (similarity of direction of the vectors). This mathematical model enables us to calculate similarity.

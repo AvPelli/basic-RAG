@@ -8,8 +8,10 @@ def main():
     weightedMatrix = retriever.getWeightedMatrix()
     retriever.writeWeightedMatrixCSV()
 
-    scores = retriever.file_scoring("Can machines think?")
-    print("Scores for prompt:\n")
+    prompt = "Can machines think?"
+    scores = retriever.file_scoring(prompt)
+
+    print(f"Scores for prompt: {prompt}\n")
     print("\n".join(f"{k}: {v}" for k, v in scores.most_common()))
 
 

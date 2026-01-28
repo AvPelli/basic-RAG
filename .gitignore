@@ -1,3 +1,6 @@
 # Python
 __pycache__
 .venv
+
+# Output files
+weighted_matrix.csv

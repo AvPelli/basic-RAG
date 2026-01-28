@@ -6,7 +6,7 @@ def main():
     retriever = Retriever()
 
     weightedMatrix = retriever.getWeightedMatrix()
-    print(weightedMatrix)
+    retriever.writeWeightedMatrixCSV()
 
     scores = retriever.file_scoring("Can machines think?")
     print("Scores for prompt:\n")

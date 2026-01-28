@@ -64,6 +64,9 @@ class Retriever:
         """multiplying TF matrix with IDF array, resulting in TF-IDF matrix"""
         return self.document_matrix.mul(self._inverse_document_frequency(), axis=0)
 
+    def writeWeightedMatrixCSV(self):
+        self.document_matrix.to_csv("weighted_matrix.csv")
+
     def file_scoring(self, prompt: str):
         """
         Score files based on TF-IDF weights of prompt words.

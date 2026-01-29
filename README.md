@@ -10,7 +10,7 @@ Inspiration drawn from a coursera course i'm following at the moment: [DeepLearn
 Basic RAG:
 
 - [x] Implement keyword-search - _completed 27/01_
-- [ ] Implement semantic-search 
+- [x] Implement semantic-search - _completed 29/01_
 - [ ] Implement LLM
 - [ ] Test complete RAG system 
 

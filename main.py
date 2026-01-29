@@ -14,7 +14,9 @@ def main():
     # print(f"Scores for prompt: {prompt}\n")
     # print("\n".join(f"{k}: {v}" for k, v in scores.most_common()))
 
-    retriever.preprocess_vectordb()
+    # retriever.preprocess_vectordb()
+
+    retriever.semantic_scoring("can machines think?", 5)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ import fitz
 import chromadb
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
+from sentence_transformers import SentenceTransformer
 
 from dotenv import dotenv_values
 
@@ -139,8 +140,6 @@ class Retriever:
         print(f"Found {len(file_paths)} files")
         print(f"Start building vector database")
 
-        from sentence_transformers import SentenceTransformer
-
         model = SentenceTransformer("BAAI/bge-base-en-v1.5", token=HF_TOKEN)
 
         all_chunks = []
@@ -187,8 +186,32 @@ class Retriever:
             metadatas=all_metadata,
         )
 
-    def semantic_scoring(self, prompt: str):
+    def semantic_scoring(self, prompt: str, top_k: int):
         """Scoring prompt by using preprocessed vector database"""
-        pass
+        model = SentenceTransformer("BAAI/bge-base-en-v1.5", token=HF_TOKEN)
+        prompt_emb = model.encode(prompt)
+
+        client = chromadb.PersistentClient(path="./rag_db")
+        collection = client.get_or_create_collection(
+            name="knowledgebase", embedding_function=None
+        )
+
+        results = collection.query(
+            query_embeddings=[prompt_emb],
+            n_results=top_k,
+            include=["documents", "metadatas", "distances"],
+        )
+
+        print(f"Found {len(results['documents'][0])} matches")
+
+        for i, (doc, meta, dist) in enumerate(
+            zip(
+                results["documents"][0],
+                results["metadatas"][0],
+                results["distances"][0],
+            )
+        ):
+            print(f"Rank {i+1} (dist: {dist:.3f}): {doc[:100]}...")
+            print(f"  Source: {meta['source_doc']}")
 
     ### To do: file-checker that sees if the file has been processed already

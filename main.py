@@ -1,22 +1,17 @@
-import os
+from dotenv import dotenv_values
+
+config = dotenv_values(".env")
+HF_TOKEN = config.get("HUGGINGFACE_HUB_TOKEN")
 from retriever import Retriever
 
 
 def main():
-    retriever = Retriever()
+    retriever = Retriever(top_k=5, mode="keyword")
+
+    retriever.score("Can machines think?")
 
     # weightedMatrix = retriever.getWeightedMatrix()
     # retriever.writeWeightedMatrixCSV()
-
-    # prompt = "Can machines think?"
-    # scores = retriever.file_scoring(prompt)
-
-    # print(f"Scores for prompt: {prompt}\n")
-    # print("\n".join(f"{k}: {v}" for k, v in scores.most_common()))
-
-    # retriever.preprocess_vectordb()
-
-    retriever.semantic_scoring("can machines think?", 5)
 
 
 if __name__ == "__main__":

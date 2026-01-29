@@ -6,12 +6,13 @@ from retriever import Retriever
 
 
 def main():
-    retriever = Retriever(top_k=5, mode="keyword")
+    retriever_keyword = Retriever(top_k=5, mode="keyword")
+    retriever_keyword.score("Can machines think?")
 
-    retriever.score("Can machines think?")
+    # retriever_keyword.writeWeightedMatrixCSV()
 
-    # weightedMatrix = retriever.getWeightedMatrix()
-    # retriever.writeWeightedMatrixCSV()
+    retriever_semantic = Retriever(top_k=5, mode="semantic")
+    retriever_semantic.score("Can machines think?")
 
 
 if __name__ == "__main__":

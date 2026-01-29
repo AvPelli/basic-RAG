@@ -25,35 +25,23 @@ class SemanticSearcher:
     def get_document_chunks(text: str, chunk_size=300, overlap=50):
         """Split document into overlapping chunks, preserving sentences"""
         paragraphs = text.split("\n\n")
-        chunks = []
-
-        current_chunk = ""
+        words = []
 
         # Add chunks with max size = chunk_size
         for para in paragraphs:
             para = para.strip()
-            if not para:
-                continue
+            if para:
+                words.extend(para.split())
 
-            if len(current_chunk) + len(para) > chunk_size and current_chunk:
-                chunks.append(current_chunk.strip())
-                current_chunk = para
-            else:
-                current_chunk += " " + para if current_chunk else para
+        chunks = []
+        i = 0
 
-        if current_chunk:
-            chunks.append(current_chunk.strip())
+        while i < len(words):
+            chunk_words = words[i : i + chunk_size]
+            chunks.append(" ".join(chunk_words))
+            i += chunk_size - overlap
 
-        # Add overlap between chunks
-        overlapped_chunks = []
-        for i, chunk in enumerate(chunks):
-            overlapped_chunks.append(chunk)
-            if i < len(chunks) - 1:
-                # Add overlapping chunk (last N words of current + first N of next)
-                overlap_text = chunks[i][-overlap:] + " " + chunks[i + 1][:overlap]
-                overlapped_chunks.append(overlap_text)
-
-        return overlapped_chunks
+        return chunks
 
     def preprocess_vectordb(self):
         """Building Chroma vector database from all documents in knowledgebase"""

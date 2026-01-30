@@ -11,7 +11,7 @@ Basic RAG:
 
 - [x] Implement keyword-search - _completed 27/01_
 - [x] Implement semantic-search - _completed 29/01_
-- [ ] Implement LLM
+- [x] Implement LLM - used opensource llama 8B _completed 30/01_
 - [ ] Test complete RAG system 
 
 

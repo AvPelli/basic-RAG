@@ -12,17 +12,17 @@ Basic RAG:
 - [x] Implement keyword-search - _completed 27/01_
 - [x] Implement semantic-search - _completed 29/01_
 - [x] Implement LLM - used opensource llama 8B _completed 30/01_
-- [ ] Test complete RAG system 
+- [x] Test complete RAG system _completed 30/01_
 
 
-Production RAG:
+Production RAG: _completed in private repo 03/02-13/02_
 
-- [ ] Study state of the art retrieval algorithms / libraries
-- [ ] Study opensource LLM variations
-- [ ] Test state of the art RAG system
-- [ ] Compare with self-implemented basic RAG and reflect on the results
+- [x] Study state of the art retrieval algorithms / libraries
+- [x] Study opensource LLM variations
+- [x] Test state of the art RAG system
+- [x] Compare with self-implemented basic RAG and reflect on the results
 
-Modifications and tuning:
+Modifications and tuning: _To be continued_
 
 - [ ] Study pre-training of opensource LLM's
 - [ ] Apply custom knowledgebase as training data
@@ -84,3 +84,7 @@ To evaluate a retriever we would need to supply a prompt and then evaluate the d
 * MAP (mean average precision) - evaluating average performance
 
 * MRR (mean reciprocal rank) - evaluating top end ranking
+
+### Basic RAG - continuation:
+
+I continued this project in a private repo, developing a RAG system using cloud based LLM models and embedders
